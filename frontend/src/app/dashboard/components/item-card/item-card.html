@@ -1,0 +1,43 @@
+<button
+  type="button"
+  class="group relative flex w-full cursor-pointer items-start gap-3 rounded-lg border border-border p-4 text-left transition-all hover:shadow-md"
+  [style.border-left]="'3px solid ' + itemType().color"
+  (click)="onClick()"
+>
+  <div class="flex-1 min-w-0">
+    <div class="flex items-center gap-2">
+      <h4 class="text-sm font-semibold text-card-foreground truncate">{{ item().title }}</h4>
+      @if (item().isPinned) {
+        <ng-icon name="lucidePin" class="size-3.5 shrink-0 text-muted-foreground" />
+      }
+      @if (item().isFavorite) {
+        <ng-icon name="lucideStar" class="size-3.5 shrink-0 text-yellow-400" />
+      }
+    </div>
+
+    @if (item().description) {
+      <p class="mt-1 text-xs text-muted-foreground line-clamp-2">{{ item().description }}</p>
+    }
+
+    <div class="mt-2 flex items-center gap-2">
+      <span
+        class="inline-flex items-center rounded-md px-1.5 py-0.5 text-xs font-medium"
+        [style.background]="'color-mix(in oklch, ' + itemType().color + ' 15%, transparent)'"
+        [style.color]="itemType().color"
+      >
+        {{ itemType().name }}
+      </span>
+      @if (item().language) {
+        <span class="text-xs text-muted-foreground">{{ item().language }}</span>
+      }
+    </div>
+
+    @if (item().tags.length > 0) {
+      <div class="mt-1.5 flex flex-wrap gap-1">
+        @for (tag of item().tags; track tag) {
+          <span class="text-xs text-muted-foreground/70">#{{ tag }}</span>
+        }
+      </div>
+    }
+  </div>
+</button>

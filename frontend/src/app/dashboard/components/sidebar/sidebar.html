@@ -1,0 +1,94 @@
+<aside
+  class="flex h-full flex-col border-r border-border bg-sidebar transition-all duration-200"
+  [class.w-56]="!collapsed()"
+  [class.w-14]="collapsed()"
+>
+  <div class="flex items-center justify-between p-3">
+    @if (!collapsed()) {
+      <h2 class="text-sm font-semibold text-sidebar-foreground">DevStash</h2>
+    }
+    <button
+      type="button"
+      class="cursor-pointer rounded-md p-1 text-sidebar-foreground hover:bg-sidebar-accent"
+      (click)="toggleSidebar()"
+      [attr.aria-label]="collapsed() ? 'Expand sidebar' : 'Collapse sidebar'"
+    >
+      <ng-icon
+        name="lucideChevronLeft"
+        class="block size-4 transition-transform"
+        [class.rotate-180]="collapsed()"
+      />
+    </button>
+  </div>
+
+  <nav class="flex-1 overflow-y-auto px-2">
+    @if (!collapsed()) {
+      <h3 class="mb-1 px-2 text-xs font-medium text-muted-foreground uppercase tracking-wider">Types</h3>
+    }
+
+    <ul class="space-y-0.5">
+      <li>
+        <button
+          type="button"
+          class="flex w-full cursor-pointer items-center gap-2.5 rounded-md px-2 py-1.5 text-sm transition-colors hover:bg-sidebar-accent"
+          [class.bg-sidebar-accent]="!selectedTypeId()"
+          [class.justify-center]="collapsed()"
+          (click)="selectType(null)"
+        >
+          <ng-icon name="lucideFolders" class="size-4 shrink-0" />
+          @if (!collapsed()) {
+            <span>All Items</span>
+          }
+        </button>
+      </li>
+
+      @for (type of itemTypes(); track type.id) {
+        <li>
+          <button
+            type="button"
+            class="flex w-full cursor-pointer items-center gap-2.5 rounded-md px-2 py-1.5 text-sm transition-colors hover:bg-sidebar-accent"
+            [class.bg-sidebar-accent]="selectedTypeId() === type.id"
+            [class.justify-center]="collapsed()"
+            [style.--type-color]="type.color"
+            (click)="selectType(type.id)"
+          >
+            <ng-icon
+              [name]="getIconName(type.icon)"
+              class="size-4 shrink-0"
+              [style.color]="type.color"
+            />
+            @if (!collapsed()) {
+              <span class="flex-1 text-left">{{ type.name }}</span>
+              <span class="text-xs text-muted-foreground tabular-nums">
+                {{ service.filteredItems().length }}
+              </span>
+            }
+          </button>
+        </li>
+      }
+    </ul>
+
+    @if (!collapsed()) {
+      <h3 class="mt-4 mb-1 px-2 text-xs font-medium text-muted-foreground uppercase tracking-wider">Collections</h3>
+    }
+
+    <ul class="space-y-0.5">
+      @for (collection of collections(); track collection.id) {
+        @if (!collapsed()) {
+          <li>
+            <button
+              type="button"
+              class="flex w-full cursor-pointer items-center gap-2.5 rounded-md px-2 py-1.5 text-sm transition-colors hover:bg-sidebar-accent"
+            >
+              <span
+                class="size-2 shrink-0 rounded-full"
+                [style.background]="collection.isFavorite ? '#facc15' : 'var(--muted-foreground)'"
+              ></span>
+              <span class="truncate text-left">{{ collection.name }}</span>
+            </button>
+          </li>
+        }
+      }
+    </ul>
+  </nav>
+</aside>

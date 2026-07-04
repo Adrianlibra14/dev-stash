@@ -1,0 +1,118 @@
+<div
+  class="fixed inset-0 z-50 transition-opacity duration-200"
+  [class.pointer-events-none]="!isOpen()"
+  [class.opacity-0]="!isOpen()"
+  [class.bg-black/50]="isOpen()"
+  (click)="close()"
+>
+</div>
+
+<aside
+  class="fixed top-0 right-0 z-50 flex h-full w-96 max-w-[calc(100vw-3rem)] flex-col border-l border-border bg-card shadow-xl transition-transform duration-300 ease-in-out"
+  [class.translate-x-full]="!isOpen()"
+  [class.translate-x-0]="isOpen()"
+  role="dialog"
+  aria-modal="true"
+  [attr.aria-hidden]="!isOpen()"
+>
+  @if (item(); as itemMeta) {
+    <div class="flex items-center justify-between border-b border-border p-4">
+      <h2 class="text-lg font-semibold text-card-foreground truncate">{{ itemMeta.title }}</h2>
+      <button
+        type="button"
+        class="cursor-pointer rounded-md p-1 text-muted-foreground hover:bg-accent hover:text-foreground"
+        (click)="close()"
+        aria-label="Close drawer"
+      >
+        <ng-icon name="lucideX" class="size-5" />
+      </button>
+    </div>
+
+    <div class="flex-1 overflow-y-auto p-4 space-y-4">
+      <div class="flex items-center gap-2 flex-wrap">
+        <z-badge
+          [zType]="'secondary'"
+          [style.background]="'color-mix(in oklch, ' + itemMeta.itemType.color + ' 15%, transparent)'"
+          [style.color]="itemMeta.itemType.color"
+        >
+          {{ itemMeta.itemType.name }}
+        </z-badge>
+
+        @if (itemMeta.language) {
+          <span class="text-sm text-muted-foreground">{{ itemMeta.language }}</span>
+        }
+      </div>
+
+      @if (itemMeta.description) {
+        <div>
+          <h3 class="text-xs font-medium text-muted-foreground uppercase tracking-wider mb-1">Description</h3>
+          <p class="text-sm text-card-foreground">{{ itemMeta.description }}</p>
+        </div>
+      }
+
+      @if (itemMeta.contentType === 'text' && itemMeta.content) {
+        <div>
+          <h3 class="text-xs font-medium text-muted-foreground uppercase tracking-wider mb-1">Content</h3>
+          <pre class="overflow-x-auto rounded-lg bg-muted p-3 text-sm"><code>{{ itemMeta.content }}</code></pre>
+        </div>
+      }
+
+      @if (itemMeta.contentType === 'file' && itemMeta.fileName) {
+        <div>
+          <h3 class="text-xs font-medium text-muted-foreground uppercase tracking-wider mb-1">File</h3>
+          <p class="text-sm text-card-foreground">{{ itemMeta.fileName }}</p>
+        </div>
+      }
+
+      @if (itemMeta.url) {
+        <div>
+          <h3 class="text-xs font-medium text-muted-foreground uppercase tracking-wider mb-1">URL</h3>
+          <a [href]="itemMeta.url" target="_blank" rel="noopener" class="text-sm text-primary hover:underline break-all">
+            {{ itemMeta.url }}
+          </a>
+        </div>
+      }
+
+      @if (itemMeta.tags.length > 0) {
+        <div>
+          <h3 class="text-xs font-medium text-muted-foreground uppercase tracking-wider mb-1">Tags</h3>
+          <div class="flex flex-wrap gap-1.5">
+            @for (tag of itemMeta.tags; track tag) {
+              <span class="inline-flex items-center rounded-md bg-secondary px-2 py-0.5 text-xs text-secondary-foreground">
+                #{{ tag }}
+              </span>
+            }
+          </div>
+        </div>
+      }
+
+      @if (itemMeta.collections.length > 0) {
+        <div>
+          <h3 class="text-xs font-medium text-muted-foreground uppercase tracking-wider mb-1">Collections</h3>
+          <div class="flex flex-wrap gap-1.5">
+            @for (col of itemMeta.collections; track col.id) {
+              <span class="inline-flex items-center rounded-md bg-muted px-2 py-0.5 text-xs text-muted-foreground">
+                {{ col.name }}
+              </span>
+            }
+          </div>
+        </div>
+      }
+
+      <div class="flex items-center gap-3 pt-2">
+        @if (itemMeta.isPinned) {
+          <span class="inline-flex items-center gap-1 text-xs text-muted-foreground">
+            <ng-icon name="lucidePin" class="size-3.5" />
+            Pinned
+          </span>
+        }
+        @if (itemMeta.isFavorite) {
+          <span class="inline-flex items-center gap-1 text-xs text-yellow-400">
+            <ng-icon name="lucideStar" class="size-3.5" />
+            Favorite
+          </span>
+        }
+      </div>
+    </div>
+  }
+</aside>

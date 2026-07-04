@@ -1,0 +1,54 @@
+<div class="flex h-screen bg-background">
+  <app-sidebar />
+
+  <main class="flex-1 overflow-y-auto">
+    <div class="mx-auto max-w-5xl p-6 space-y-8">
+      @if (!selectedTypeId()) {
+        <section>
+          <h2 class="mb-4 text-lg font-semibold text-foreground">Collections</h2>
+          <div class="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
+            @for (collection of collections(); track collection.id) {
+              <app-collection-card [collection]="collection" />
+            }
+          </div>
+        </section>
+      }
+
+      <section>
+        <h2 class="mb-4 text-lg font-semibold text-foreground">
+          @if (selectedTypeId()) {
+            @let type = getItemType(selectedTypeId()!);
+            @if (type) {
+              <span [style.color]="type.color">{{ type.name }}s</span>
+            }
+          } @else {
+            All Items
+          }
+        </h2>
+
+        <div class="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3">
+          @for (item of filteredItems(); track item.id) {
+            @let type = getItemType(item.itemTypeId);
+            @if (type) {
+              <app-item-card
+                [item]="item"
+                [itemType]="type"
+                [language]="item.language"
+                (itemClick)="openItem($event)"
+              />
+            }
+          }
+        </div>
+
+        @if (filteredItems().length === 0) {
+          <div class="flex flex-col items-center justify-center py-16 text-center">
+            <p class="text-lg text-muted-foreground">No items found</p>
+            <p class="mt-1 text-sm text-muted-foreground">Select a different type or create a new item.</p>
+          </div>
+        }
+      </section>
+    </div>
+  </main>
+
+  <app-item-sheet />
+</div>
