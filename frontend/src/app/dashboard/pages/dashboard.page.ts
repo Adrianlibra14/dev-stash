@@ -1,5 +1,6 @@
 import { Component, inject } from '@angular/core';
 
+import { TopBarComponent } from '../components/top-bar/top-bar';
 import { SidebarComponent } from '../components/sidebar/sidebar';
 import { CollectionCardComponent } from '../components/collection-card/collection-card';
 import { ItemCardComponent } from '../components/item-card/item-card';
@@ -8,7 +9,7 @@ import { DashboardService } from '../services/dashboard.service';
 
 @Component({
   selector: 'app-dashboard',
-  imports: [SidebarComponent, CollectionCardComponent, ItemCardComponent, ItemSheetComponent],
+  imports: [TopBarComponent, SidebarComponent, CollectionCardComponent, ItemCardComponent, ItemSheetComponent],
   templateUrl: './dashboard.page.html',
 })
 export class DashboardPage {

@@ -1,0 +1,33 @@
+<header class="flex h-14 items-center gap-4 px-4" style="background-color: #0a0c10;">
+  <button
+    type="button"
+    class="cursor-pointer rounded-md p-1.5 text-foreground hover:bg-accent lg:hidden"
+    (click)="toggleSidebar()"
+    aria-label="Toggle sidebar"
+  >
+    <ng-icon name="lucideMenu" class="size-5" />
+  </button>
+
+  <span class="text-lg font-semibold text-foreground">DevStash</span>
+
+  <div class="flex flex-1 items-center justify-end gap-4">
+    <div class="relative w-full max-w-sm">
+      <ng-icon
+        name="lucideSearch"
+        class="pointer-events-none absolute left-2.5 top-1/2 size-4 -translate-y-1/2 text-muted-foreground"
+      />
+      <input
+        z-input
+        type="text"
+        placeholder="Search code body, tags, titles, item types..."
+        class="w-full border-0 bg-card pl-9"
+        aria-label="Search"
+      />
+    </div>
+
+    <z-button class="bg-emerald-500 text-black hover:bg-emerald-400">
+      <ng-icon name="lucidePlus" class="size-4" />
+      <span>New Resource</span>
+    </z-button>
+  </div>
+</header>

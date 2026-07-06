@@ -2,13 +2,12 @@ import { Component, computed, inject, input } from '@angular/core';
 import { NgIcon, provideIcons } from '@ng-icons/core';
 import { lucideStar } from '@ng-icons/lucide';
 
-import { ZardBadgeComponent } from '@/shared/components/badge/badge.component';
 import type { MockCollection, MockItemType } from '../../../../mock/mock-data';
 import { DashboardService } from '../../services/dashboard.service';
 
 @Component({
   selector: 'app-collection-card',
-  imports: [NgIcon, ZardBadgeComponent],
+  imports: [NgIcon],
   templateUrl: './collection-card.html',
   viewProviders: [provideIcons({ lucideStar })],
 })

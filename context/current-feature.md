@@ -1,16 +1,17 @@
 # Current Feature
 
-**Dashboard UI Phase 1** — Zard UI initialization, component installation, and `/dashboard` route setup (phase 1 of 4).
+**Dashboard UI Phase 2** — Main dashboard layout, dark mode, top bar with search and new item button (phase 2 of 4).
 
 ## Status 
 
-Complete
+Completed
 
 ## Goals
 
-- Zard UI initialization and components
-- Zard component installation
-- Dashboard route at /dashboard
+- Main dashboard layout and global styles
+- Dark mode by default
+- Top bar with search and new item button (display only)
+- Placeholder sidebar and main area
 
 ## Notes
 
@@ -49,3 +50,21 @@ Complete
 - Collection cards are color-coded by dominant item type
 - Item cards have type-colored left borders, show language, tags, favorite/pin status
 - Item detail drawer opens from the right side showing full item metadata
+
+### Phase 2 - Main Dashboard Layout
+
+- Created `TopBarComponent` with search input (display only) and "New Resource" button (display only, emerald green)
+- Restructured dashboard layout: sidebar occupies full left side height, top bar and main content in right flex column
+- Dark mode default via `class="dark"` on `<html>`
+- Mobile hamburger menu button in top bar toggles sidebar visibility
+- Updated `app.spec.ts` to test router outlet instead of default Angular placeholder content
+- Adjusted dark theme colors with three distinct tonalities matching reference image:
+  - Sidebar: `#050507` (darkest)
+  - Top bar: `#0a0c10` (medium-dark)
+  - Background: `#11131a` (lighter dark)
+  - Cards: `#181b24` (lightest dark)
+  - Borders: subtle (`rgba(255,255,255,0.06)`)
+- Section headings: emerald green with dot indicator, uppercase tracking-wide
+- Collection cards: solid dark background with colored left border (3px)
+- Item cards: solid dark background with colored left border (3px)
+- Removed unused `ZardBadgeComponent` import from `CollectionCardComponent`

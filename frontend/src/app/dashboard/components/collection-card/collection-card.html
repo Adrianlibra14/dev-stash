@@ -1,6 +1,7 @@
 <div
-  class="group relative cursor-pointer overflow-hidden rounded-xl border border-border p-5 transition-all hover:shadow-lg"
-  [style.background]="'color-mix(in oklch, ' + dominantColor() + ' 12%, var(--card))'"
+  class="group relative cursor-pointer overflow-hidden rounded-xl border-0 p-5 transition-all hover:shadow-lg"
+  [style.background]="'var(--card)'"
+  [style.border-left]="'3px solid ' + dominantColor()"
 >
   <div class="flex items-start justify-between gap-2">
     <div class="flex-1 min-w-0">
@@ -14,16 +15,20 @@
     }
   </div>
 
-  <div class="mt-3 flex items-center gap-2">
+  <div class="mt-4 flex items-center justify-between">
+    <span class="text-xs text-muted-foreground">View {{ itemCount() }} items</span>
     @if (defaultType()) {
-      <z-badge
-        [zType]="'secondary'"
-        [style.background]="'color-mix(in oklch, ' + defaultType()!.color + ' 20%, transparent)'"
+      <span
+        class="inline-flex items-center rounded-md px-2 py-0.5 text-xs font-medium"
+        [style.background]="'color-mix(in oklch, ' + defaultType()!.color + ' 15%, transparent)'"
         [style.color]="defaultType()!.color"
       >
         {{ defaultType()!.name }}
-      </z-badge>
+      </span>
+    } @else {
+      <span class="inline-flex items-center rounded-md bg-secondary px-2 py-0.5 text-xs text-muted-foreground">
+        Mixed
+      </span>
     }
-    <span class="text-xs text-muted-foreground">{{ itemCount() }} items</span>
   </div>
 </div>
