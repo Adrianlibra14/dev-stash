@@ -2,7 +2,7 @@
   <button
     type="button"
     class="cursor-pointer rounded-md p-1.5 text-foreground hover:bg-accent lg:hidden"
-    (click)="toggleSidebar()"
+    (click)="toggleMobileSidebar()"
     aria-label="Toggle sidebar"
   >
     <ng-icon name="lucideMenu" class="size-5" />
@@ -19,7 +19,7 @@
       <input
         z-input
         type="text"
-        placeholder="Search code body, tags, titles, item types..."
+        [attr.placeholder]="searchPlaceholder()"
         class="w-full border-0 bg-card pl-9"
         aria-label="Search"
       />
@@ -27,7 +27,7 @@
 
     <z-button class="bg-emerald-500 text-black hover:bg-emerald-400">
       <ng-icon name="lucidePlus" class="size-4" />
-      <span>New Resource</span>
+      <span class="hidden lg:inline">New Resource</span>
     </z-button>
   </div>
 </header>

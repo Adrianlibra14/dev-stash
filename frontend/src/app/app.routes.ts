@@ -10,4 +10,8 @@ export const routes: Routes = [
     path: 'dashboard',
     loadComponent: () => import('./dashboard/pages/dashboard.page').then(m => m.DashboardPage),
   },
+  {
+    path: 'items/:typeSlug',
+    loadComponent: () => import('./dashboard/pages/dashboard.page').then(m => m.DashboardPage),
+  },
 ];

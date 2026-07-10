@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, signal } from '@angular/core';
 import { NgIcon, provideIcons } from '@ng-icons/core';
 import { lucideSearch, lucidePlus, lucideMenu } from '@ng-icons/lucide';
 
@@ -21,7 +21,19 @@ import { DashboardService } from '../../services/dashboard.service';
 export class TopBarComponent {
   protected readonly service = inject(DashboardService);
 
-  toggleSidebar(): void {
-    this.service.toggleSidebar();
+  protected readonly searchPlaceholder = signal('Search code body, tags, titles, item types...');
+
+  constructor() {
+    window.addEventListener('resize', () => this.updatePlaceholder());
+  }
+
+  private updatePlaceholder(): void {
+    this.searchPlaceholder.set(
+      window.innerWidth < 1024 ? 'Search' : 'Search code body, tags, titles, item types...'
+    );
+  };
+
+  toggleMobileSidebar(): void {
+    this.service.toggleMobileSidebar();
   }
 }

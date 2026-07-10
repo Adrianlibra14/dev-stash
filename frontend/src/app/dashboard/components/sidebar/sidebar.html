@@ -1,11 +1,20 @@
 <aside
-  class="flex h-full flex-col border-r border-border/40 bg-sidebar transition-all duration-200"
-  [class.w-56]="!collapsed()"
-  [class.w-14]="collapsed()"
+  class="flex fixed inset-y-0 left-0 z-50 lg:z-auto lg:relative lg:translate-x-0 h-full flex-col border-r border-border/40 bg-sidebar transition-all duration-200"
+  [class.shadow-2xl]="mobileOpen()"
+  [class.-translate-x-full]="!mobileOpen()"
+  [class.translate-x-0]="mobileOpen()"
+  [class.w-60]="!collapsed() || mobileOpen()"
+  [class.w-14]="collapsed() && !mobileOpen()"
 >
-  <div class="flex items-center justify-between p-3">
-    @if (!collapsed()) {
-      <h2 class="text-sm font-semibold text-sidebar-foreground">DevStash</h2>
+  <!-- Header -->
+  <div class="flex items-center gap-2 p-3" [class.justify-center]="collapsed() && !mobileOpen()">
+    @if (!collapsed() || mobileOpen()) {
+      <div class="flex flex-1 items-center gap-2">
+        <div class="flex items-center gap-1.5">
+          <span class="text-sm font-bold text-sidebar-foreground">DevStash</span>
+        </div>
+        <span class="rounded bg-secondary px-1 py-0.5 text-xs lg:text-[10px] font-medium text-muted-foreground">FREE</span>
+      </div>
     }
     <button
       type="button"
@@ -13,82 +22,234 @@
       (click)="toggleSidebar()"
       [attr.aria-label]="collapsed() ? 'Expand sidebar' : 'Collapse sidebar'"
     >
-      <ng-icon
-        name="lucideChevronLeft"
-        class="block size-4 transition-transform"
-        [class.rotate-180]="collapsed()"
-      />
+      <ng-icon name="lucidePanelLeft" class="size-4" />
     </button>
   </div>
 
   <nav class="flex-1 overflow-y-auto px-2">
-    @if (!collapsed()) {
-      <h3 class="mb-1 px-2 text-xs font-medium text-muted-foreground uppercase tracking-wider">Types</h3>
-    }
-
-    <ul class="space-y-0.5">
-      <li>
+    <!-- Item Types -->
+    <div class="mb-1">
+      @if (!collapsed() || mobileOpen()) {
         <button
           type="button"
-          class="flex w-full cursor-pointer items-center gap-2.5 rounded-md px-2 py-1.5 text-sm transition-colors hover:bg-sidebar-accent"
-          [class.bg-sidebar-accent]="!selectedTypeId()"
-          [class.justify-center]="collapsed()"
-          (click)="selectType(null)"
+          class="flex w-full cursor-pointer items-center gap-1 px-3 lg:px-2 py-3.5 lg:py-1.5 text-xs font-medium text-muted-foreground uppercase tracking-wider transition-colors hover:bg-sidebar-accent hover:text-sidebar-foreground rounded"
+          (click)="toggleItemTypes()"
         >
-          <ng-icon name="lucideFolders" class="size-4 shrink-0" />
-          @if (!collapsed()) {
-            <span>All Items</span>
-          }
+          <ng-icon
+            name="lucideChevronDown"
+            class="size-3 transition-transform"
+            [class.-rotate-90]="!itemTypesOpen()"
+          />
+          <span class="flex-1 text-left">Item Types</span>
         </button>
-      </li>
+      }
 
-      @for (type of itemTypes(); track type.id) {
-        <li>
+      @if (itemTypesOpen() || collapsed()) {
+        <ul class="space-y-0.5" [class.mt-1]="collapsed() && !mobileOpen()">
+          <li>
+            <a
+              routerLink="/dashboard"
+              routerLinkActive="bg-sidebar-accent"
+              [routerLinkActiveOptions]="{ exact: true }"
+              class="flex w-full items-center gap-2.5 rounded-md px-3 lg:px-2 py-3.5 lg:py-1.5 text-sm transition-colors hover:bg-sidebar-accent"
+              [class.justify-center]="collapsed() && !mobileOpen()"
+              (click)="closeMobileSidebar()"
+            >
+              <ng-icon name="lucideFolders" class="size-4 shrink-0" />
+              @if (!collapsed() || mobileOpen()) {
+                <span class="flex-1 text-left">All Items</span>
+                <span class="text-xs text-muted-foreground tabular-nums">{{ service.allItems().length }}</span>
+              }
+            </a>
+          </li>
+
+          @for (type of itemTypes(); track type.id) {
+            <li>
+              <a
+                [routerLink]="['/items', type.slug]"
+                routerLinkActive="bg-sidebar-accent"
+                class="flex w-full items-center gap-2.5 rounded-md px-3 lg:px-2 py-3.5 lg:py-1.5 text-sm transition-colors hover:bg-sidebar-accent"
+                [class.justify-center]="collapsed() && !mobileOpen()"
+                (click)="closeMobileSidebar()"
+              >
+                <ng-icon
+                  [name]="getIconName(type.icon)"
+                  class="size-4 shrink-0"
+                  [style.color]="type.color"
+                />
+                @if (!collapsed() || mobileOpen()) {
+                  <span class="flex-1 text-left">{{ type.name }}</span>
+                  <span class="text-xs text-muted-foreground tabular-nums">
+                    {{ getItemCount(type.id) }}
+                  </span>
+                }
+              </a>
+            </li>
+          }
+        </ul>
+      }
+    </div>
+
+    <!-- Collections (only visible when expanded or mobile open) -->
+    @if (!collapsed() || mobileOpen()) {
+      <div class="mb-1 mt-4">
+        <div class="flex items-center gap-1">
           <button
             type="button"
-            class="flex w-full cursor-pointer items-center gap-2.5 rounded-md px-2 py-1.5 text-sm transition-colors hover:bg-sidebar-accent"
-            [class.bg-sidebar-accent]="selectedTypeId() === type.id"
-            [class.justify-center]="collapsed()"
-            [style.--type-color]="type.color"
-            (click)="selectType(type.id)"
+            class="flex flex-1 cursor-pointer items-center gap-1 text-xs font-medium text-muted-foreground uppercase tracking-wider transition-colors hover:bg-sidebar-accent hover:text-sidebar-foreground rounded px-3 lg:px-2 py-3.5 lg:py-1.5"
+            (click)="toggleCollections()"
           >
             <ng-icon
-              [name]="getIconName(type.icon)"
-              class="size-4 shrink-0"
-              [style.color]="type.color"
+              name="lucideChevronDown"
+              class="size-3 transition-transform"
+              [class.-rotate-90]="!collectionsOpen()"
             />
-            @if (!collapsed()) {
-              <span class="flex-1 text-left">{{ type.name }}</span>
-              <span class="text-xs text-muted-foreground tabular-nums">
-                {{ service.filteredItems().length }}
-              </span>
-            }
+            <span class="flex-1 text-left">Collections</span>
           </button>
-        </li>
-      }
-    </ul>
+          <button
+            type="button"
+            class="cursor-pointer rounded-sm inline-flex items-center justify-center p-1.5 lg:p-0.5 lg:px-1 bg-sidebar-accent text-sidebar-foreground lg:bg-transparent lg:text-muted-foreground hover:bg-sidebar-accent hover:text-sidebar-foreground"
+            aria-label="New collection"
+          >
+            <ng-icon name="lucidePlus" class="size-4 lg:size-3.5" />
+          </button>
+        </div>
 
-    @if (!collapsed()) {
-      <h3 class="mt-4 mb-1 px-2 text-xs font-medium text-muted-foreground uppercase tracking-wider">Collections</h3>
-    }
+        @if (collectionsOpen()) {
+          <div class="space-y-0.5">
+            @if (favoriteCollections().length > 0) {
+              <div class="mt-1">
+                <button
+                  type="button"
+                  class="flex w-full cursor-pointer items-center gap-1 px-3 lg:px-2 py-3.5 lg:py-1.5 text-xs lg:text-[10px] font-medium text-muted-foreground uppercase tracking-wider transition-colors hover:bg-sidebar-accent hover:text-sidebar-foreground rounded"
+                  (click)="toggleFavorites()"
+                >
+                  <ng-icon
+                    name="lucideChevronDown"
+                    class="size-3 transition-transform"
+                    [class.-rotate-90]="!favoritesOpen()"
+                  />
+                  <span class="flex-1 text-left">Favorites</span>
+                </button>
 
-    <ul class="space-y-0.5">
-      @for (collection of collections(); track collection.id) {
-        @if (!collapsed()) {
-          <li>
-            <button
-              type="button"
-              class="flex w-full cursor-pointer items-center gap-2.5 rounded-md px-2 py-1.5 text-sm transition-colors hover:bg-sidebar-accent"
-            >
-              <span
-                class="size-2 shrink-0 rounded-full"
-                [style.background]="collection.isFavorite ? '#facc15' : 'var(--muted-foreground)'"
-              ></span>
-              <span class="truncate text-left">{{ collection.name }}</span>
-            </button>
-          </li>
+                @if (favoritesOpen()) {
+                  <ul class="space-y-0.5">
+                    @for (collection of favoriteCollections(); track collection.id) {
+                      <li>
+                        <button
+                          type="button"
+                          class="flex w-full cursor-pointer items-center gap-2.5 rounded-md px-3 lg:px-2 py-3.5 lg:py-1.5 text-sm transition-colors hover:bg-sidebar-accent"
+                        >
+                          <ng-icon name="lucideStar" class="size-3.5 shrink-0 text-yellow-400" />
+                          <span class="flex-1 truncate text-left">{{ collection.name }}</span>
+                          <span class="text-xs text-muted-foreground tabular-nums">{{ getCollectionCount(collection.id) }}</span>
+                        </button>
+                      </li>
+                    }
+                  </ul>
+                }
+              </div>
+            }
+
+            @if (recentCollections().length > 0) {
+              <div class="mt-1">
+                <button
+                  type="button"
+                  class="flex w-full cursor-pointer items-center gap-1 px-3 lg:px-2 py-3.5 lg:py-1.5 text-xs lg:text-[10px] font-medium text-muted-foreground uppercase tracking-wider transition-colors hover:bg-sidebar-accent hover:text-sidebar-foreground rounded"
+                  (click)="toggleRecentCollections()"
+                >
+                  <ng-icon
+                    name="lucideChevronDown"
+                    class="size-3 transition-transform"
+                    [class.-rotate-90]="!recentCollectionsOpen()"
+                  />
+                  <span class="flex-1 text-left">Recent</span>
+                </button>
+
+                @if (recentCollectionsOpen()) {
+                  <ul class="space-y-0.5">
+                    @for (collection of recentCollections(); track collection.id) {
+                      <li>
+                        <button
+                          type="button"
+                        class="flex w-full cursor-pointer items-center gap-2.5 rounded-md px-3 lg:px-2 py-3.5 lg:py-1.5 text-sm transition-colors hover:bg-sidebar-accent"
+                        [class.py-2.5]="mobileOpen()"
+                      >
+                        <span class="size-2 shrink-0 rounded-full" [style.background]="collection.isFavorite ? '#facc15' : 'var(--muted-foreground)'"></span>
+                        <span class="flex-1 truncate text-left">{{ collection.name }}</span>
+                        <span class="text-xs text-muted-foreground tabular-nums">{{ getCollectionCount(collection.id) }}</span>
+                      </button>
+                    </li>
+                  }
+                </ul>
+              }
+            </div>
+          }
+
+            <div class="mt-1">
+              <button
+                type="button"
+                class="flex w-full cursor-pointer items-center gap-1 px-3 lg:px-2 py-3.5 lg:py-1.5 text-xs lg:text-[10px] font-medium text-muted-foreground uppercase tracking-wider transition-colors hover:bg-sidebar-accent hover:text-sidebar-foreground rounded"
+                (click)="toggleAllCollections()"
+              >
+                <ng-icon
+                  name="lucideChevronDown"
+                  class="size-3 transition-transform"
+                  [class.-rotate-90]="!allCollectionsOpen()"
+                />
+                <span class="flex-1 text-left">All Collections</span>
+              </button>
+
+              @if (allCollectionsOpen()) {
+                <ul class="space-y-0.5">
+                  @for (collection of collections(); track collection.id) {
+                    <li>
+                      <button
+                        type="button"
+                        class="flex w-full cursor-pointer items-center gap-2.5 rounded-md px-3 lg:px-2 py-3.5 lg:py-1.5 text-sm transition-colors hover:bg-sidebar-accent"
+                        [class.py-2.5]="mobileOpen()"
+                      >
+                        <span class="size-2 shrink-0 rounded-full" [style.background]="collection.isFavorite ? '#facc15' : 'var(--muted-foreground)'"></span>
+                        <span class="flex-1 truncate text-left">{{ collection.name }}</span>
+                        <span class="text-xs text-muted-foreground tabular-nums">{{ getCollectionCount(collection.id) }}</span>
+                      </button>
+                    </li>
+                  }
+                </ul>
+              }
+            </div>
+          </div>
         }
-      }
-    </ul>
+      </div>
+    }
   </nav>
+
+  <!-- User area (only visible when expanded or mobile open) -->
+  @if (!collapsed() || mobileOpen()) {
+    <div class="border-t border-sidebar-border p-3">
+      <div class="flex items-center gap-2.5">
+        <div
+          class="flex size-8 shrink-0 items-center justify-center rounded-full text-xs font-semibold text-white"
+          [style.background]="userAvatarColor()"
+        >
+          @if (user().avatarUrl) {
+            <img [src]="user().avatarUrl" alt="" class="size-8 rounded-full object-cover" />
+          } @else {
+            <span>{{ userInitials() }}</span>
+          }
+        </div>
+        <div class="flex-1 min-w-0">
+          <p class="text-sm font-medium text-sidebar-foreground truncate">{{ user().displayName || user().email }}</p>
+          <p class="text-xs text-muted-foreground truncate">{{ user().email }}</p>
+        </div>
+        <button
+          type="button"
+          class="cursor-pointer rounded-md p-1 text-muted-foreground hover:bg-sidebar-accent hover:text-sidebar-foreground"
+          aria-label="Settings"
+        >
+          <ng-icon name="lucideSettings" class="size-4" />
+        </button>
+      </div>
+    </div>
+  }
 </aside>

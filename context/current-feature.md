@@ -1,17 +1,20 @@
 # Current Feature
 
-**Dashboard UI Phase 2** — Main dashboard layout, dark mode, top bar with search and new item button (phase 2 of 4).
+**Dashboard UI Phase 3** — Collapsible sidebar with item links, favorite/recent collections, user avatar, and mobile drawer.
 
-## Status 
+## Status
 
 Completed
 
 ## Goals
 
-- Main dashboard layout and global styles
-- Dark mode by default
-- Top bar with search and new item button (display only)
-- Placeholder sidebar and main area
+- Collapsible sidebar
+- Items/types with links to /items/TYPE (eg. items/snippets)
+- Favorite collections
+- Most recent collections
+- User avatar area at the bottom
+- Drawer icon to open/close sidebar
+- Always a drawer on mobile view
 
 ## Notes
 
@@ -68,3 +71,28 @@ Completed
 - Collection cards: solid dark background with colored left border (3px)
 - Item cards: solid dark background with colored left border (3px)
 - Removed unused `ZardBadgeComponent` import from `CollectionCardComponent`
+
+### Phase 3 - Sidebar Enhancement
+
+- Added `/items/:typeSlug` route for filtered item type views
+- Updated `DashboardService` with `favoriteCollections`, `recentCollections`, `mobileSidebarOpen`, and `selectItemTypeBySlug`
+- Updated `SidebarComponent` with `RouterLink`/`RouterLinkActive` for navigation
+- Sidebar item types link to `/items/:slug` with active state highlighting
+- Added collapsible "Favorites" section showing favorited collections with star icons and item counts
+- Added collapsible "Recent" section showing 3 most recently updated collections
+- Added collapsible "All Collections" section with all collections
+- Added user avatar area at bottom with colored initials fallback, name, email, and settings gear
+- Mobile drawer behavior: sidebar slides in from left with backdrop overlay, always w-60 on mobile
+- Top bar hamburger toggles mobile drawer instead of desktop collapse
+- Dashboard page handles route param changes via `ActivatedRoute.paramMap` subscription
+- Moved sidebar, top-bar, item-sheet shell from `DashboardPage` to `AppComponent` for persistence across routes
+- Mobile drawer animates with `transition-transform` slide (translateX), no animation on viewport resize via `preventResizeAnimation()` handler
+- `lucidePanelLeft` icon as sidebar toggle (replaced grid + chevron)
+- Escape key closes mobile drawer (and item sheet if open)
+- `z-50` permanent on mobile sidebar to prevent cards overlapping during close animation
+- Collapsible section headers (Item Types, Collections, Favorites, Recent, All Collections) with `hover:bg-sidebar-accent` backgrounds
+- Removed "v1.0.0-mockup" text from sidebar header
+- Desktop collapsed state shows only navigational icons (All Items + type links), hides Collections and user area
+- Top bar: "+" icon only on mobile (`hidden lg:inline` on "New Resource" text)
+- Responsive search placeholder: "Search" on mobile, full text on desktop
+- Larger mobile tap targets: `px-3 py-3.5` on all sidebar items, collapsible headers, and sub-headers
