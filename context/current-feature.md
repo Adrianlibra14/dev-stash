@@ -1,20 +1,20 @@
 # Current Feature
 
-**Dashboard UI Phase 3** — Collapsible sidebar with item links, favorite/recent collections, user avatar, and mobile drawer.
+**Dashboard UI Phase 4** — Main dashboard area with stats cards, recent collections, pinned items, and recent items.
+
+Spec: @context/features/dashboard-phase-4-spec.md
 
 ## Status
 
-Completed
+In Progress
 
 ## Goals
 
-- Collapsible sidebar
-- Items/types with links to /items/TYPE (eg. items/snippets)
-- Favorite collections
-- Most recent collections
-- User avatar area at the bottom
-- Drawer icon to open/close sidebar
-- Always a drawer on mobile view
+- Main area to the right
+- 4 stats cards at the top (number of items, collections, favorite items, favorite collections)
+- Recent collections
+- Pinned items
+- 10 recent items
 
 ## Notes
 
