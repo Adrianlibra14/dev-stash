@@ -1,50 +1,100 @@
 <div class="mx-auto max-w-5xl p-6 space-y-8">
   @if (!selectedTypeId()) {
+    <section aria-label="Statistics" class="hidden sm:block">
+      <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+        <app-stats-card label="Items" [value]="allItems().length" icon="lucideLayers" color="#3b82f6" />
+        <app-stats-card label="Collections" [value]="collections().length" icon="lucideFolders" color="#10b981" />
+        <app-stats-card label="Favorite Items" [value]="favoriteItems().length" icon="lucideStar" color="#facc15" />
+        <app-stats-card label="Favorite Collections" [value]="favoriteCollections().length" icon="lucideFolderHeart" color="#8b5cf6" />
+      </div>
+    </section>
+
     <section>
       <h2 class="mb-4 flex items-center gap-2 text-xs font-semibold uppercase tracking-widest text-emerald-400">
         <span class="size-2 rounded-full bg-emerald-400"></span>
-        Collections Directory
+        Recent Collections
       </h2>
       <div class="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
-        @for (collection of collections(); track collection.id) {
+        @for (collection of recentCollections(); track collection.id) {
           <app-collection-card [collection]="collection" />
         }
       </div>
     </section>
-  }
 
-  <section>
-    <h2 class="mb-4 flex items-center gap-2 text-xs font-semibold uppercase tracking-widest text-emerald-400">
-      <span class="size-2 rounded-full bg-emerald-400"></span>
-      @if (selectedTypeId()) {
+    @if (pinnedItems().length > 0) {
+      <section>
+        <h2 class="mb-4 flex items-center gap-2 text-xs font-semibold uppercase tracking-widest text-emerald-400">
+          <ng-icon name="lucidePin" class="size-3.5" />
+          Pinned Items
+        </h2>
+        <div class="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3">
+          @for (item of pinnedItems(); track item.id) {
+            @let type = getItemType(item.itemTypeId);
+            @if (type) {
+              <app-item-card
+                [item]="item"
+                [itemType]="type"
+                [language]="item.language"
+                (itemClick)="openItem($event)"
+              />
+            }
+          }
+        </div>
+      </section>
+    }
+
+    <section>
+      <div class="mb-4 flex items-center justify-between gap-2">
+        <h2 class="flex items-center gap-2 text-xs font-semibold uppercase tracking-widest text-emerald-400">
+          <span class="size-2 rounded-full bg-emerald-400"></span>
+          Recent Items
+        </h2>
+        <span class="text-xs text-muted-foreground">Showing {{ recentItems().length }} of {{ allItems().length }}</span>
+      </div>
+      <div class="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3">
+        @for (item of recentItems(); track item.id) {
+          @let type = getItemType(item.itemTypeId);
+          @if (type) {
+            <app-item-card
+              [item]="item"
+              [itemType]="type"
+              [language]="item.language"
+              (itemClick)="openItem($event)"
+            />
+          }
+        }
+      </div>
+    </section>
+  } @else {
+    <section>
+      <h2 class="mb-4 flex items-center gap-2 text-xs font-semibold uppercase tracking-widest text-emerald-400">
+        <span class="size-2 rounded-full bg-emerald-400"></span>
         @let type = getItemType(selectedTypeId()!);
         @if (type) {
           {{ type.name }}s
         }
-      } @else {
-        Saved Knowledge Resources
-      }
-    </h2>
+      </h2>
 
-    <div class="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3">
-      @for (item of filteredItems(); track item.id) {
-        @let type = getItemType(item.itemTypeId);
-        @if (type) {
-          <app-item-card
-            [item]="item"
-            [itemType]="type"
-            [language]="item.language"
-            (itemClick)="openItem($event)"
-          />
+      <div class="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3">
+        @for (item of filteredItems(); track item.id) {
+          @let itemType = getItemType(item.itemTypeId);
+          @if (itemType) {
+            <app-item-card
+              [item]="item"
+              [itemType]="itemType"
+              [language]="item.language"
+              (itemClick)="openItem($event)"
+            />
+          }
         }
-      }
-    </div>
-
-    @if (filteredItems().length === 0) {
-      <div class="flex flex-col items-center justify-center py-16 text-center">
-        <p class="text-lg text-muted-foreground">No items found</p>
-        <p class="mt-1 text-sm text-muted-foreground">Select a different type or create a new item.</p>
       </div>
-    }
-  </section>
+
+      @if (filteredItems().length === 0) {
+        <div class="flex flex-col items-center justify-center py-16 text-center">
+          <p class="text-lg text-muted-foreground">No items found</p>
+          <p class="mt-1 text-sm text-muted-foreground">Select a different type or create a new item.</p>
+        </div>
+      }
+    </section>
+  }
 </div>

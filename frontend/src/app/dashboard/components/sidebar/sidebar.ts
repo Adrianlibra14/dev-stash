@@ -34,7 +34,7 @@ const ICON_MAP: Record<string, string> = {
   selector: 'app-sidebar',
   imports: [NgIcon, RouterLink, RouterLinkActive],
   templateUrl: './sidebar.html',
-  styles: [':host { display: contents; }'],
+  styles: [`:host { display: contents; }`],
   viewProviders: [
     provideIcons({
       lucideCode,

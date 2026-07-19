@@ -6,7 +6,7 @@ Spec: @context/features/dashboard-phase-4-spec.md
 
 ## Status
 
-In Progress
+Completed
 
 ## Goals
 
@@ -96,3 +96,13 @@ In Progress
 - Top bar: "+" icon only on mobile (`hidden lg:inline` on "New Resource" text)
 - Responsive search placeholder: "Search" on mobile, full text on desktop
 - Larger mobile tap targets: `px-3 py-3.5` on all sidebar items, collapsible headers, and sub-headers
+
+### Phase 4 - Main Dashboard Area
+
+- Created `StatsCardComponent` (`dashboard/components/stats-card/`) — colored icon, value, and label
+- Added 4 stats cards at the top: Items (blue, `lucideLayers`), Collections (emerald, `lucideFolders`), Favorite Items (yellow, `lucideStar`), Favorite Collections (purple, `lucideFolderHeart`)
+- Added `DashboardService` computeds: `favoriteItems`, `pinnedItems`, `collectionsByRecency`, `itemsByRecency`, `recentItems` (10 most recent by `updatedAt`)
+- Dashboard home (`/dashboard`) now shows: stats cards, Recent Collections (5 most recent), Pinned Items (pin icon heading), Recent Items (10 latest with "Showing X of Y" count)
+- Reused existing `CollectionCardComponent` and `ItemCardComponent` for the new sections
+- Type-filtered view (`/items/:typeSlug`) unchanged — still shows all items of the selected type
+- Stats grid: 2 columns on mobile, 4 on desktop (`grid-cols-2 lg:grid-cols-4`)

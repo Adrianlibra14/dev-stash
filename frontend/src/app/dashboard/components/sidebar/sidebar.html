@@ -32,7 +32,7 @@
       @if (!collapsed() || mobileOpen()) {
         <button
           type="button"
-          class="flex w-full cursor-pointer items-center gap-1 px-3 lg:px-2 py-3.5 lg:py-1.5 text-xs font-medium text-muted-foreground uppercase tracking-wider transition-colors hover:bg-sidebar-accent hover:text-sidebar-foreground rounded"
+          class="flex w-full cursor-pointer items-center gap-1 mb-2 px-3 lg:px-2 py-3.5 lg:py-1.5 text-xs font-medium text-muted-foreground uppercase tracking-wider transition-colors hover:bg-sidebar-accent hover:text-sidebar-foreground rounded"
           (click)="toggleItemTypes()"
         >
           <ng-icon
@@ -45,7 +45,7 @@
       }
 
       @if (itemTypesOpen() || collapsed()) {
-        <ul class="space-y-0.5" [class.mt-1]="collapsed() && !mobileOpen()">
+        <ul class="space-y-1.5" [class.mt-1]="collapsed() && !mobileOpen()">
           <li>
             <a
               routerLink="/dashboard"
@@ -108,10 +108,10 @@
           </button>
           <button
             type="button"
-            class="cursor-pointer rounded-sm inline-flex items-center justify-center p-1.5 lg:p-0.5 lg:px-1 bg-sidebar-accent text-sidebar-foreground lg:bg-transparent lg:text-muted-foreground hover:bg-sidebar-accent hover:text-sidebar-foreground"
+            class="cursor-pointer rounded-sm inline-flex items-center justify-center px-1.5 py-3.5 lg:px-1 lg:py-1.5 text-sidebar-foreground lg:text-muted-foreground hover:bg-sidebar-accent hover:text-sidebar-foreground"
             aria-label="New collection"
           >
-            <ng-icon name="lucidePlus" class="size-4 lg:size-3.5" />
+            <ng-icon name="lucidePlus" class="plus-icon !size-5 lg:size-3.5" />
           </button>
         </div>
 

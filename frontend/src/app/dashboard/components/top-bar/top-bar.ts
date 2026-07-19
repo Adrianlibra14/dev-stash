@@ -24,7 +24,7 @@ export class TopBarComponent {
   protected readonly searchPlaceholder = signal('Search code body, tags, titles, item types...');
 
   constructor() {
-    window.addEventListener('resize', () => this.updatePlaceholder());
+    this.updatePlaceholder();
   }
 
   private updatePlaceholder(): void {

@@ -48,10 +48,28 @@ export class DashboardService {
     this.collections().filter(c => c.isFavorite)
   );
 
+  readonly favoriteItems = computed(() =>
+    this.allItems().filter(i => i.isFavorite)
+  );
+
+  readonly pinnedItems = computed(() =>
+    this.allItems().filter(i => i.isPinned)
+  );
+
+  readonly collectionsByRecency = computed(() =>
+    [...this.collections()].sort((a, b) => b.updatedAt.getTime() - a.updatedAt.getTime())
+  );
+
+  readonly itemsByRecency = computed(() =>
+    [...this.allItems()].sort((a, b) => b.updatedAt.getTime() - a.updatedAt.getTime())
+  );
+
   readonly recentCollections = computed(() =>
-    [...this.collections()]
-      .sort((a, b) => b.updatedAt.getTime() - a.updatedAt.getTime())
-      .slice(0, 3)
+    this.collectionsByRecency().slice(0, 3)
+  );
+
+  readonly recentItems = computed(() =>
+    this.itemsByRecency().slice(0, 10)
   );
 
   getItemCountByType(typeId: string): number {
