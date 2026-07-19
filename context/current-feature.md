@@ -1,20 +1,20 @@
 # Current Feature
 
-**Dashboard UI Phase 4** — Main dashboard area with stats cards, recent collections, pinned items, and recent items.
+**Neon Postgres + Sequelize** — Set up Sequelize ORM with Neon serverless PostgreSQL, initial schema, and migrations.
 
-Spec: @context/features/dashboard-phase-4-spec.md
+Spec: @context/features/database-spec.md
 
 ## Status
 
-Completed
+In Progress
 
 ## Goals
 
-- Main area to the right
-- 4 stats cards at the top (number of items, collections, favorite items, favorite collections)
-- Recent collections
-- Pinned items
-- 10 recent items
+- Use Neon PostgreSQL (serverless)
+- Create initial schema based on data models in project-overview.md (this will evolve)
+- Include passport.js models
+- Add appropriate indexes and cascade deletes
+- Always create migrations — never push directly unless specified (dev branch in `DATABASE_URL`, production branch separate)
 
 ## Notes
 
@@ -105,4 +105,4 @@ Completed
 - Dashboard home (`/dashboard`) now shows: stats cards, Recent Collections (5 most recent), Pinned Items (pin icon heading), Recent Items (10 latest with "Showing X of Y" count)
 - Reused existing `CollectionCardComponent` and `ItemCardComponent` for the new sections
 - Type-filtered view (`/items/:typeSlug`) unchanged — still shows all items of the selected type
-- Stats grid: 2 columns on mobile, 4 on desktop (`grid-cols-2 lg:grid-cols-4`)
+- Stats grid: 1 columns on mobile, 4 on desktop (`grid-cols-1 lg:grid-cols-4`)
