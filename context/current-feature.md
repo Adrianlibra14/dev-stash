@@ -6,7 +6,7 @@ Spec: @context/features/database-spec.md
 
 ## Status
 
-In Progress
+Completed
 
 ## Goals
 
@@ -106,3 +106,20 @@ In Progress
 - Reused existing `CollectionCardComponent` and `ItemCardComponent` for the new sections
 - Type-filtered view (`/items/:typeSlug`) unchanged — still shows all items of the selected type
 - Stats grid: 1 columns on mobile, 4 on desktop (`grid-cols-1 lg:grid-cols-4`)
+
+### Database Setup
+
+- Installed `sequelize` v6.37.8, `pg`, `pg-hstore`, `dotenv`, and `sequelize-cli` v6.6.5 (dev)
+- Created `src/config/database.ts` — runtime Sequelize instance with Neon SSL, throws if `DATABASE_URL` missing
+- Created `src/config/config.js` + `.sequelizerc` — sequelize-cli config (JS, per official Neon/Sequelize docs), dev/prod environments via `NODE_ENV`
+- Created `.env.example` with `NODE_ENV`, `DATABASE_URL` (dev), `DATABASE_URL_PROD` (prod), and `PORT`
+- Added 5 Sequelize models (TypeScript, matching project-overview drafts): `User` (passport.js-ready: password + githubId), `ItemType`, `Item`, `Collection`, `Tag`
+- Created `src/models/associations.ts` — all relations (hasMany, belongsTo, belongsToMany) with string through tables
+- Created 7 migrations (JS, sequelize-cli style) with proper FK ordering: users → item_types → items → collections → tags → item_collections → item_tags
+- Indexes: unique email/githubId on users, unique (slug, userId) on item_types, userId/itemTypeId/isFavorite/isPinned on items, userId on collections, reverse-FK indexes on join tables
+- Cascades: CASCADE on user→items/collections/custom_types, SET NULL on collections.defaultTypeId, CASCADE on both join tables
+- Neon-specific: `gen_random_uuid()` defaults (native PG 13+, no extension), SSL required, ENUM type cleanup in items down migration
+- Created seed for 7 system item types matching frontend mock data (snippet, prompt, command, note, link, file, image)
+- Created `scripts/test-db.ts` — integration smoke test (CRUD + associations)
+- Wired `connectDatabase()` into server startup with error handling
+- Added npm scripts: `migrate`, `migrate:undo`, `migration:generate`, `seed:all`, `seed:undo`, `test-db`
