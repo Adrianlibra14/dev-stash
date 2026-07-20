@@ -24,7 +24,7 @@ Completed
 
 <!-- Keep this updated. Earliest to latest -->
 
-### Phase 1 - Project Scaffolding
+### Project Scaffolding
 
 #### Backend (Express v5.2.1)
 
@@ -42,7 +42,7 @@ Completed
 - Test runner: Vitest v4.0.8 (no Karma/Jasmine)
 - Scripts: `npm run start` (ng serve), `npm run build` (production), `npm run watch` (dev build), `npm run test` (vitest)
 
-### Phase 1 - Dashboard UI
+### Phase 1 - Dashboard UI: Initial Setup
 
 - Initialized Zard UI library via `components.json` with Neutral theme, `@/` path aliases
 - Installed Zard dependencies: `@angular/cdk`, `class-variance-authority`, `clsx`, `tailwind-merge`, `@ng-icons/core`, `@ng-icons/lucide`, `tailwindcss-animate`
@@ -54,7 +54,7 @@ Completed
 - Item cards have type-colored left borders, show language, tags, favorite/pin status
 - Item detail drawer opens from the right side showing full item metadata
 
-### Phase 2 - Main Dashboard Layout
+### Phase 2 - Dashboard UI: Layout & Theme
 
 - Created `TopBarComponent` with search input (display only) and "New Resource" button (display only, emerald green)
 - Restructured dashboard layout: sidebar occupies full left side height, top bar and main content in right flex column
@@ -72,7 +72,7 @@ Completed
 - Item cards: solid dark background with colored left border (3px)
 - Removed unused `ZardBadgeComponent` import from `CollectionCardComponent`
 
-### Phase 3 - Sidebar Enhancement
+### Phase 3 - Dashboard UI: Sidebar Enhancement
 
 - Added `/items/:typeSlug` route for filtered item type views
 - Updated `DashboardService` with `favoriteCollections`, `recentCollections`, `mobileSidebarOpen`, and `selectItemTypeBySlug`
@@ -97,7 +97,7 @@ Completed
 - Responsive search placeholder: "Search" on mobile, full text on desktop
 - Larger mobile tap targets: `px-3 py-3.5` on all sidebar items, collapsible headers, and sub-headers
 
-### Phase 4 - Main Dashboard Area
+### Phase 4 - Dashboard UI: Content Area
 
 - Created `StatsCardComponent` (`dashboard/components/stats-card/`) — colored icon, value, and label
 - Added 4 stats cards at the top: Items (blue, `lucideLayers`), Collections (emerald, `lucideFolders`), Favorite Items (yellow, `lucideStar`), Favorite Collections (purple, `lucideFolderHeart`)
